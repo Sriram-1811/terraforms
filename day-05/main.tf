@@ -34,7 +34,7 @@ resource "aws_security_group" "asg" {
     }
 
     tags = {
-        name = "terra-sg-1"
+        Name = "terra-sg-1"
     } 
 }
 
@@ -45,14 +45,14 @@ resource "aws_instance" "web-server-1" {
 
     connection {
       type = "ssh"
-      user = "linuxuser"
+      user = "ubuntu"
       host = self.public_ip
-      private_key = file("~/.ssh/id_rsa")
+      private_key = file("/home/linuxuser/.ssh/id_rsa")
     }
 
     provisioner "file" {
       source = "app.py"
-      destination = "/home/linuxuser/app.py"
+      destination = "/home/ubuntu/app.py"
     }
 
     provisioner "remote-exec" {
@@ -60,7 +60,7 @@ resource "aws_instance" "web-server-1" {
         "echo 'Hello from the remote instance'",
         "sudo apt update -y",
         "sudo apt-get install -y python3-pip",
-        "cd /home/ubuntu",
+        "cd /home/ubuntu/",
         "sudo pip3 install flask",
         "sudo python3 app.py &",
        ]
